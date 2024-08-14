@@ -1,5 +1,12 @@
 import SwiftUI
 import WebKit
+import Foundation
+
+#if os(iOS)
+public typealias PlatformImage = UIImage
+#elseif os(macOS)
+public typealias PlatformImage = NSImage
+#endif
 
 /// A proxy value that supports programmatic control of the web view within a view hierarchy.
 ///
@@ -88,6 +95,11 @@ public final class WebViewProxy: ObservableObject {
                 }
             }
         }
+    }
+  
+    /// Takes a snapshot of the current WebView contents.
+    public func takeSnapshot(with: WKSnapshotConfiguration?, completionHandler: @escaping (PlatformImage?, (any Error)?) -> Void) {
+      webView?.wrappedValue.takeSnapshot(with: with, completionHandler: completionHandler)
     }
 
     /// Navigates to a requested URL.
