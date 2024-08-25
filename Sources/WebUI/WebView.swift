@@ -23,14 +23,16 @@ public struct WebView {
     private var allowsBackForwardNavigationGestures = false
     private var allowsLinkPreview = true
     private var isRefreshable = false
+    private var isTransparent: Bool
 
     /// Creates new WebView.
     /// - Parameters:
     ///   - request: The initial request specifying the URL to load.
     ///   - configuration: The configuration for the new web view.
-    public init(request: URLRequest? = nil, configuration: WKWebViewConfiguration = .init()) {
+  public init(request: URLRequest? = nil, configuration: WKWebViewConfiguration = .init(), transparent: Bool = true) {
         self.initialRequest = request
         self.configuration = configuration
+        self.isTransparent = transparent
     }
 
     /// Sets WKUIDelegate to WebView.
@@ -106,6 +108,19 @@ public struct WebView {
         webView.allowsBackForwardNavigationGestures = allowsBackForwardNavigationGestures
         webView.allowsLinkPreview = allowsLinkPreview
         webView.isRefreshable = isRefreshable
+      if self.isTransparent {
+          #if os(macOS)
+              if NSAppKitVersion.current.rawValue > 1500 {
+                webView.setValue(false, forKey: "drawsBackground")
+              } else {
+                webView.setValue(true, forKey: "drawsTransparentBackground")
+              }
+          #else
+              webView.isOpaque = false
+              webView.backgroundColor = UIColor.clear
+              webView.scrollView.backgroundColor = UIColor.clear
+          #endif
+      }
     }
 
     @MainActor
