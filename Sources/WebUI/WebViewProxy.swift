@@ -101,6 +101,13 @@ public final class WebViewProxy: ObservableObject {
     public func takeSnapshot(with: WKSnapshotConfiguration?, completionHandler: @escaping (PlatformImage?, (any Error)?) -> Void) {
       webView?.wrappedValue.takeSnapshot(with: with, completionHandler: completionHandler)
     }
+  
+    /// Navigates to a requested local file URL.
+    /// - Parameters:
+    ///   - request: The request specifying the URL to which to navigate.
+    public func loadFileURL(URL: URL, allowingReadAccessTo readAccessURL: URL) {
+      webView?.wrappedValue.loadFileURL(URL, allowingReadAccessTo: readAccessURL)
+    }
 
     /// Navigates to a requested URL.
     /// - Parameters:

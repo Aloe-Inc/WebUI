@@ -16,6 +16,8 @@ public struct WebView {
     let configuration: WKWebViewConfiguration
 
     private let initialRequest: URLRequest?
+    private let initialURL: URL?
+    private let readAccessURL: URL?
 
     private var uiDelegate: (any WKUIDelegate)?
     private var navigationDelegate: (any WKNavigationDelegate)?
@@ -31,8 +33,22 @@ public struct WebView {
     ///   - configuration: The configuration for the new web view.
   public init(request: URLRequest? = nil, configuration: WKWebViewConfiguration = .init(), transparent: Bool = true) {
         self.initialRequest = request
+        self.initialURL = nil
+        self.readAccessURL = nil
         self.configuration = configuration
         self.isTransparent = transparent
+    }
+  
+    /// Creates new WebView.
+    /// - Parameters:
+    ///   - request: The initial request specifying the URL to load.
+    ///   - configuration: The configuration for the new web view.
+  public init(url: URL? = nil, readAccessURL: URL? = nil, configuration: WKWebViewConfiguration = .init(), transparent: Bool = true) {
+      self.initialURL = url
+      self.readAccessURL = readAccessURL
+      self.initialRequest = nil
+      self.configuration = configuration
+      self.isTransparent = transparent
     }
 
     /// Sets WKUIDelegate to WebView.
@@ -128,5 +144,9 @@ public struct WebView {
         if let initialRequest {
             webView.load(initialRequest)
         }
+      if let initialURL {
+        if let readAccessURL {
+        webView.loadFileURL(initialURL, allowingReadAccessTo: readAccessURL)}
+      }
     }
 }
