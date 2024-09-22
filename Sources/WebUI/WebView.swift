@@ -31,6 +31,7 @@ public struct WebView {
     /// - Parameters:
     ///   - request: The initial request specifying the URL to load.
     ///   - configuration: The configuration for the new web view.
+  @MainActor
   public init(request: URLRequest? = nil, configuration: WKWebViewConfiguration = .init(), transparent: Bool = true) {
         self.initialRequest = request
         self.initialURL = nil
@@ -43,6 +44,7 @@ public struct WebView {
     /// - Parameters:
     ///   - request: The initial request specifying the URL to load.
     ///   - configuration: The configuration for the new web view.
+  @MainActor
   public init(url: URL? = nil, readAccessURL: URL? = nil, configuration: WKWebViewConfiguration = .init(), transparent: Bool = true) {
       self.initialURL = url
       self.readAccessURL = readAccessURL
